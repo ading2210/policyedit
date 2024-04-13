@@ -1,6 +1,6 @@
 # Chrome OS Policy Editor
 
-This is a Python program which is able to modify the device policies on a Chrome OS device. 
+This is a Python program which is able to modify the device policies on a Chrome OS system. 
 
 ## Installation:
 You must have Python 3 installed, with support for virtual environments and pip.
@@ -38,7 +38,7 @@ options:
 
 ### On Linux-ChromiumOS:
 1. Locate the user data directory (this defaults to `~/.config/chromium`) or explicitly set it with `--user-data-dir`.
-2. Generate a normal RSA private key using OpenSSL: `openssl genrsa -out key.pem 1024`
+2. Generate a normal RSA private key using OpenSSL: `openssl genrsa -out key.pem 2048`
 3. Run `main.py`, specifying the policy file at `DATA_DIR/stub_device_policy`.
 4. Overwrite the original policy with the patched version.
 5. Copy the public key to `DATA_DIR/stub_owner.key`.
