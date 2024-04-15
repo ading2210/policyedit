@@ -1,4 +1,5 @@
 import argparse
+import sys
 from pathlib import Path
 
 from Crypto.Hash import SHA1
@@ -33,6 +34,10 @@ if __name__ == "__main__":
   patch_command.add_argument("--public-key", required=True,  help="The path to the public key that will be generated")
   patch_command.add_argument("--new-policy", required=True,  help="The modified policy file that is generated")
   args = parser.parse_args()
+
+  if args.mode is None:
+    parser.print_help()
+    sys.exit(1)
 
   fetch_response_data = Path(args.device_policy).expanduser().read_bytes()
 

@@ -1,6 +1,6 @@
 # Chrome OS Policy Editor
 
-This is a Python program which is able to modify the device policies on a Chrome OS system. 
+This is a Python program which is able to modify the device policies on a Chrome OS system, based on [lilac](https://github.com/MercuryWorkshop/lilac).
 
 ## Installation:
 You must have Python 3 installed, with support for virtual environments and pip.
@@ -13,18 +13,15 @@ pip3 install -r requirements.txt
 
 ## Usage:
 ```
-usage: main.py [-h] --private-key PRIVATE_KEY --public-key PUBLIC_KEY --device-policy DEVICE_POLICY --new-policy NEW_POLICY
+usage: main.py [-h] {view,patch} ...
+
+positional arguments:
+  {view,patch}
+    view        Read the device settings without modifying anything.
+    patch       Patch an existing device policy file.
 
 options:
-  -h, --help            show this help message and exit
-  --private-key PRIVATE_KEY
-                        The path to the private key
-  --public-key PUBLIC_KEY
-                        The path to the public key that will be generated
-  --device-policy DEVICE_POLICY
-                        The path to the device policy file
-  --new-policy NEW_POLICY
-                        The modified policy file that is generated
+  -h, --help    show this help message and exit
 ```
 
 ### On Real Chrome OS:
@@ -42,3 +39,25 @@ options:
 3. Run `main.py`, specifying the policy file at `DATA_DIR/stub_device_policy`.
 4. Overwrite the original policy with the patched version.
 5. Copy the public key to `DATA_DIR/stub_owner.key`.
+
+## Copyright:
+
+This repository is licensed under the GNU GPL v3.
+
+```
+ading2210/policyedit - A program to modify Chrome OS device policies
+Copyright (C) 2024 ading2210
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+```
