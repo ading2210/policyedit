@@ -3,11 +3,12 @@
 This is a Python program which is able to modify the device policies on a Chrome OS system, based on [lilac](https://github.com/MercuryWorkshop/lilac).
 
 ## Installation:
-You must have Python 3 installed, with support for virtual environments and pip.
+You must have Python 3 installed on Linux, with support for virtual environments and pip. 
 
 Clone this repository, and run the following commands:
 ```
 python3 -m venv .venv
+source .venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
@@ -28,17 +29,15 @@ options:
 1. Make sure you are in developer mode and have rootfs verification off.
 2. Add `--disable-policy-key-verification` to the end of `/etc/chrome_dev.conf`.
 3. Edit `/etc/lsb-release` to change the release channel to `testimage-channel`.
-4. Generate a normal RSA private key.
-5. Run `main.py` with the correct arguments, specifying any policy files that are in `/var/lib/devicesettings/`.
-6. Copy the public key to `/var/lib/devicesettings/owner.key`.
-7. Overwrite the original policy files with the patched versions.
+4. Run `main.py` with the correct arguments, specifying any policy files that are in `/var/lib/devicesettings/`.
+5. Copy the public key to `/var/lib/devicesettings/owner.key`.
+6. Overwrite the original policy files with the patched versions.
 
 ### On Linux-ChromiumOS:
-1. Locate the user data directory (this defaults to `~/.config/chromium`) or explicitly set it with `--user-data-dir`.
-2. Generate a normal RSA private key using OpenSSL: `openssl genrsa -out key.pem 2048`
-3. Run `main.py`, specifying the policy file at `DATA_DIR/stub_device_policy`.
-4. Overwrite the original policy with the patched version.
-5. Copy the public key to `DATA_DIR/stub_owner.key`.
+1. Locate the user data directory (this defaults to `~/.config/chromium`) or explicitly set it with `--user-data-dir=DATA_DIR`.
+2. Run `main.py`, specifying the policy file at `DATA_DIR/stub_device_policy`.
+3. Overwrite the original policy with the patched version.
+4. Copy the public key to `DATA_DIR/stub_owner.key`.
 
 ## Copyright:
 

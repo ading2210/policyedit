@@ -2,6 +2,10 @@ from Crypto.Hash import SHA1
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.PublicKey import RSA
 
+def new_private_key():
+  rsa_key = RSA.generate(2048)
+  return rsa_key.export_key()
+
 def rsa_sign(data, private_key):
   rsa_key = RSA.importKey(private_key)
   digest = SHA1.new()

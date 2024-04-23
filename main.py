@@ -15,7 +15,6 @@ if __name__ == "__main__":
 
   patch_command = sub_parsers.add_parser("patch", help="Patch an existing device policy file.")
   patch_command.add_argument("--device-policy", required=True, help="The path to the device policy file")
-  patch_command.add_argument("--private-key", required=True, help="The path to the private key")
   patch_command.add_argument("--public-key", required=True,  help="The path to the public key that will be generated")
   patch_command.add_argument("--new-policy", required=True,  help="The modified policy file that is generated")
   patch_command.add_argument("--policy-json", required=False, help="Import a policies.json file")
@@ -33,7 +32,7 @@ if __name__ == "__main__":
     print(policy.device_settings)
 
   else:
-    private_key = Path(args.private_key).expanduser().read_bytes()
+    private_key = signer.new_private_key()
     new_policy_path = Path(args.new_policy).expanduser()
     public_key_path = Path(args.public_key).expanduser()
 
