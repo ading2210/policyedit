@@ -1,25 +1,10 @@
 import argparse
 import sys
+import json
 from pathlib import Path
 
-from Crypto.Hash import SHA1
-from Crypto.Signature import PKCS1_v1_5
-from Crypto.PublicKey import RSA
-
-from interfaces.chrome_device_policy_pb2 import ChromeDeviceSettingsProto
-from interfaces.device_management_backend_pb2 import PolicyFetchResponse
-from interfaces.device_management_backend_pb2 import PolicyData
-
-def rsa_sign(data, private_key):
-  rsa_key = RSA.importKey(private_key)
-  digest = SHA1.new()
-  digest.update(data)
-  signer = PKCS1_v1_5.new(rsa_key)
-  return signer.sign(digest)
-
-def get_public_key(private_key):
-  rsa_key = RSA.importKey(private_key)
-  return rsa_key.public_key().exportKey(format="DER")
+import device_policy
+import signer
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
@@ -33,40 +18,31 @@ if __name__ == "__main__":
   patch_command.add_argument("--private-key", required=True, help="The path to the private key")
   patch_command.add_argument("--public-key", required=True,  help="The path to the public key that will be generated")
   patch_command.add_argument("--new-policy", required=True,  help="The modified policy file that is generated")
+  patch_command.add_argument("--policy-json", required=False, help="Import a policies.json file")
+
   args = parser.parse_args()
 
   if args.mode is None:
     parser.print_help()
     sys.exit(1)
 
-  fetch_response_data = Path(args.device_policy).expanduser().read_bytes()
-
-  #extract device settings from the serialized data
-  fetch_response = PolicyFetchResponse()
-  fetch_response.ParseFromString(fetch_response_data)
-  policy_data = PolicyData()
-  policy_data.ParseFromString(fetch_response.policy_data)
-  device_settings = ChromeDeviceSettingsProto()
-  device_settings.ParseFromString(policy_data.policy_value)
+  policy_bytes = Path(args.device_policy).expanduser().read_bytes()
+  policy = device_policy.DevicePolicy(policy_bytes)
 
   if args.mode == "view":
-    print(device_settings)
+    print(policy.device_settings)
 
   else:
     private_key = Path(args.private_key).expanduser().read_bytes()
     new_policy_path = Path(args.new_policy).expanduser()
     public_key_path = Path(args.public_key).expanduser()
 
-    #make our edits to the device settings
-    device_settings.guest_mode_enabled.guest_mode_enabled = False
+    if args.policy_json:
+      policy_json = Path(args.policy_json).expanduser().read_text()
+      policy_dict = json.loads(policy_json)["chromePolicies"]
+      policy.import_policy(policy_dict)
+      sys.exit(1)
 
-    #re-encode the settings and sign it
-    policy_data.policy_value = device_settings.SerializeToString()
-    fetch_response.policy_data = policy_data.SerializeToString()
-    fetch_response.policy_data_signature = rsa_sign(fetch_response.policy_data, private_key)
-    fetch_response.new_public_key = get_public_key(private_key)
-
-    #write the new policy file and public key to a file so chrome can use them
-    new_policy_data = fetch_response.SerializeToString()
+    new_policy_data = policy.serialize_policy(private_key)
     new_policy_path.write_bytes(new_policy_data)
-    public_key_path.write_bytes(fetch_response.new_public_key)
+    public_key_path.write_bytes(signer.get_public_key(private_key))
