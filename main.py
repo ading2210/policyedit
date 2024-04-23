@@ -41,7 +41,6 @@ if __name__ == "__main__":
       policy_json = Path(args.policy_json).expanduser().read_text()
       policy_dict = json.loads(policy_json)["chromePolicies"]
       policy.import_policy(policy_dict)
-      sys.exit(1)
 
     new_policy_data = policy.serialize_policy(private_key)
     new_policy_path.write_bytes(new_policy_data)
