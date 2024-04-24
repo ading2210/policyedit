@@ -5,6 +5,7 @@ proto_dir="$base_dir/proto"
 mkdir -p $proto_dir
 
 tag="main"
+repo="src"
 proto_paths=(
   "components/policy/proto/chrome_device_policy.proto"
   "components/policy/proto/policy_common_definitions.proto"
@@ -14,10 +15,18 @@ proto_paths=(
   "third_party/shell-encryption/src/serialization.proto"
 )
 
-for path in "${proto_paths[@]}"; do
-  filename="$(basename "$path")"
-  url="https://chromium.googlesource.com/chromium/src/+/refs/heads/$tag/$path?format=TEXT"
+download_file() {
+  local path="$1"
+  local filename="$(basename "$path")"
+  local url="https://chromium.googlesource.com/chromium/$repo/+/refs/heads/$tag/$path?format=TEXT"
   echo "downloading $filename"
   curl "$url" | base64 -d > "$proto_dir/$filename"
-  #sed -i 's/import "/import "generated\//' "$base_dir/proto/$filename"
+}
+
+for path in "${proto_paths[@]}"; do
+  download_file "$path"
 done
+
+#download from different repository 
+repo="src/out"
+download_file "chromeos-Debug/gen/components/policy/proto/cloud_policy.proto"

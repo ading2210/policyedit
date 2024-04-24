@@ -92,6 +92,7 @@ class DevicePolicy:
     #attempt to parse and insert it into the device settings
     ParseDict(policy_json, self.device_settings)
   
+  #sometimes policy json values dont match with the protobuf values
   def fix_policy_value(self, policy_key, policy_value):
     if policy_key == "device_local_accounts.account":
       return self.convert_local_accounts(policy_value)
@@ -107,7 +108,8 @@ class DevicePolicy:
       key = key.replace(prefix, "", 1)
       returned_dict[key] = value
     return returned_dict
-    
+  
+  #convert the list of local accounts so it can be imported by protobuf
   def convert_local_accounts(self, policy_value):
     new_accounts = []
     
