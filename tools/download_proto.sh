@@ -30,3 +30,4 @@ done
 #download from different repository 
 repo="src/out"
 download_file "chromeos-Debug/gen/components/policy/proto/cloud_policy.proto"
+download_file "chromeos-Debug/gen/components/policy/proto/chrome_settings.proto"

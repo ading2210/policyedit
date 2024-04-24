@@ -23,10 +23,7 @@ class DevicePolicy:
     self.fetch_response = PolicyFetchResponse()
     self.fetch_response.ParseFromString(policy_bytes)
     self.policy_data = PolicyData()
-    self.policy_data.ParseFromString(self.fetch_response.policy_data)
-    print(self.policy_data)
-    print(self.fetch_response)
-    
+    self.policy_data.ParseFromString(self.fetch_response.policy_data)    
     self.device_settings = ChromeDeviceSettingsProto()
     self.device_settings.ParseFromString(self.policy_data.policy_value)
 
