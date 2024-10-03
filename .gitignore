@@ -1,5 +1,10 @@
 /data
 
+# Project-Specific
+policies.json
+policy.*
+*.key
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
