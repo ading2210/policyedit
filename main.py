@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
   patch_command = sub_parsers.add_parser("patch", help="Patch an existing device policy file.")
   patch_command.add_argument("--device-policy", required=True, help="The path to the device policy file")
-  patch_command.add_argument("--public-key", required=True,  help="The path to the public key that will be generated")
+  patch_command.add_argument("--new-key", required=True,  help="The path to the public key that will be generated")
   patch_command.add_argument("--new-policy", required=True,  help="The modified policy file that is generated")
   patch_command.add_argument("--policy-json", required=False, help="Import a policies.json file")
 
@@ -29,16 +29,16 @@ if __name__ == "__main__":
   policy = device_policy.DevicePolicy(policy_bytes)
 
   if args.mode == "view":
-    print(policy.device_settings)
+    print(json.dumps(policy.convert_to_policies_json(), indent=2))
 
-  else:
+  if args.mode == "patch":
     private_key = signer.new_private_key()
     new_policy_path = Path(args.new_policy).expanduser()
-    public_key_path = Path(args.public_key).expanduser()
+    public_key_path = Path(args.new_key).expanduser()
 
     if args.policy_json:
       policy_json = Path(args.policy_json).expanduser().read_text()
-      policy_dict = json.loads(policy_json)["chromePolicies"]
+      policy_dict = json.loads(policy_json)
       policy.import_policy(policy_dict)
 
     new_policy_data = policy.serialize_policy(private_key)
