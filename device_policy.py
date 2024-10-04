@@ -1,5 +1,4 @@
 import pathlib
-import json
 import yaml
 from google.protobuf.json_format import MessageToDict
 
@@ -82,8 +81,6 @@ class DevicePolicy:
         self.set_policy_item(policy_key, policy_value)
       except ParseError:
         print(f"skipped policy {policy_name} due to invalid parameters")
-    
-    print(self.device_settings)
 
   def set_policy_item(self, policy_key, policy_value):
     # See if we need to fix a non-standard mapping of values.
