@@ -3,7 +3,8 @@
 This is a Python program which is able to modify the device policies on a Chrome OS system, based on [lilac](https://github.com/MercuryWorkshop/lilac).
 
 # Installation:
-You must have Python 3 installed on Linux, with support for virtual environments and pip. 
+You must have Python 3 installed on Linux, with support for virtual environments and pip.
+You can get Python 3 on real ChromeOS by running `dev_install` as root.
 
 Clone this repository, and run the following commands:
 ```
